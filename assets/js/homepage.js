@@ -5,26 +5,37 @@ var repoSearchTerm = document.querySelector("#repo-search-term");
   
 var formSubmitHandler = function(event) {
   event.preventDefault();
-  console.log(event);
   var username = nameInputEl.value.trim();
 
   if (username) {
     getUserRepos(username);
+    // clear old content
+    repoContainerEl.textContent = "";
     nameInputEl.value = "";
   } else {
     alert("Please enter a GitHub username.");
   }
-
 };
+
+var displayRepos = function(repos, searchTerm) {
+  // check if api returned any repos
+  if (repos.length === 0) {
+    repoContainerEl.textContent = "No repositories found.";
+    return;
+  }
+
+  repoSearchTerm.textContent = searchTerm;
 
 var getUserRepos = function(user) {
     // format the github api url
     var apiUrl = "https://api.github.com/users/" + user + "/repos";
   
     // make a request to the url
-    fetch(apiUrl).then(function(response) {
+    fetch(apiUrl)
+    .then(function(response) {
       // request was successful
       if (response.ok) {
+        console.log(response);
         response.json().then(function(data) {
         displayRepos(data, user);
       });
@@ -35,33 +46,11 @@ var getUserRepos = function(user) {
     .catch(function(error) {
       alert("Unable to connect to GitHut");
   });
+};
+repoSearchTerm.textContent = searchTerm;
 
-  userFormEl.addEventListener("submit", formSubmitHandler);
-
-// <main class="flex-row justify-space-between">
-    // <div class="col-12 col-md-4"></div>
-    //   <div class="card">
-    //     <h3 class="card-header text-uppercase">Search by User</h3>
-    //     <form id="user-form" class="card-body">
-    //       <label class="form-label" for="username">Username</label>
-    //       <input name="username" id="username" type="text" autofocus="true" class="form-input" />
-    //       <button type="submit" class="btn">Get User</button>
-    //     </form>
-    //   </div>
-
-    var displayRepos = function(repos, searchTerm) {
-      // check if api returned any repos
-      if (repos.length === 0) {
-        repoContainerEl.textContent = "No repositories found.";
-        return;
-      }
-      console.log(repos);
-      console.log(searchTerm);
-      // clear old content
-      repoContainerEl.textContent = "";
-      repoSearchTerm.textContent = searchTerm;
       // loop over repos
-      for (var i = 0, i < repos.length, i++) {
+      for (var i = 0; i < repos.length; i++) {
         // format repo name
         var repoName = repos[i].owner.login + "/" + repos[i].name;
       // create a container for each repo
@@ -96,7 +85,9 @@ var getUserRepos = function(user) {
     };
 
 
-     Hour, minute, second wayne Time
+    userFormEl.addEventListener("submit", formSubmitHandler);
+
+     // Hour, minute, second wayne Time
      // total distance = 3016 nautical MediaElementAudioSourceNode
      // take off time 11:01:15 sec  Hawaii time
      // true air speed 462 knots (nautical miles/hr)
