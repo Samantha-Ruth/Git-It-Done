@@ -1,5 +1,6 @@
 var limitWarningEl = document.querySelector("#limit-warning");
 var issueContainerEl = document.querySelector("#issues-container");
+
 var getRepoIssues = function(repo) {
     // create a variable to hold query endpoint
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
